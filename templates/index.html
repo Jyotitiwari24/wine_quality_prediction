@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Wine Quality Predictor</title>
+</head>
+<body>
+    <h1>Wine Quality Prediction</h1>
+    <form id="wineForm">
+        <label>Fixed Acidity: <input type="number" step="any" name="fixed_acidity" required></label><br>
+        <label>Volatile Acidity: <input type="number" step="any" name="volatile_acidity" required></label><br>
+        <label>Citric Acid: <input type="number" step="any" name="citric_acid" required></label><br>
+        <label>Residual Sugar: <input type="number" step="any" name="residual_sugar" required></label><br>
+        <label>Chlorides: <input type="number" step="any" name="chlorides" required></label><br>
+        <label>Free Sulfur Dioxide: <input type="number" step="any" name="free_sulfur_dioxide" required></label><br>
+        <label>Total Sulfur Dioxide: <input type="number" step="any" name="total_sulfur_dioxide" required></label><br>
+        <label>Density: <input type="number" step="any" name="density" required></label><br>
+        <label>pH: <input type="number" step="any" name="pH" required></label><br>
+        <label>Sulphates: <input type="number" step="any" name="sulphates" required></label><br>
+        <label>Alcohol: <input type="number" step="any" name="alcohol" required></label><br><br>
+        <button type="submit">Predict</button>
+    </form>
+
+    <h2 id="result"></h2>
+
+    <script>
+        document.getElementById('wineForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const input = Array.from(formData.values()).map(Number);
+
+            const response = await fetch('/predict', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ input })
+            });
+
+            const data = await response.json();
+            document.getElementById('result').innerText = data.prediction;
+        });
+    </script>
+</body>
+</html>
